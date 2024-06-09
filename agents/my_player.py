@@ -131,7 +131,8 @@ class my_player(
         
         #return valid_actions[2]["action"], money
         
-        #print(community)
+        print(f"my_hands:{hole_card}")
+        print(f"public_cards:{community}")
         #print(main_pot)
         #print(side_pot)
         #print(money)
