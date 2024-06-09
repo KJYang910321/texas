@@ -112,7 +112,9 @@ class my_player(
         action, amount = call_action_info["action"], call_action_info["amount"]
         
         # basic info for the game state
-        #print(round_state)
+        #print(round_state['next_player'])
+        #print(round_state['small_blind'])
+        #print(round_state['street'])
         community = round_state["community_card"]
         main_pot = round_state["pot"]["main"]["amount"]
         side_pot = round_state["pot"]["side"]
@@ -152,7 +154,7 @@ class my_player(
             #print(new)
             #print("------------------")
             
-            public = public = np.random.choice(new, (5-len(community)), replace=False)
+            public = np.random.choice(new, (5-len(community)), replace=False)
             #print(public)
             
             # tidy up cards
