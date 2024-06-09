@@ -23,11 +23,11 @@ def is_straw(comb):
     for card in comb:
       numbers[num_dict[card[1]]] += 1
 
-    numbers[1] = numbers[14]
+    #numbers[1] = numbers[14]
     
     count = 0
     maxi = 0
-    for idx in range(1, 15):
+    for idx in range(2, 15):
       if numbers[idx] != 0:
         count += 1
         maxi = idx
@@ -36,11 +36,11 @@ def is_straw(comb):
           return 135 + idx
         count = 0
         maxi = 0
-    return 0
 
     # handle 10-A and A-5
     if count >= 5 and numbers[14] != 0:
         return 135 + 14
+    return 0
 
 def is_combo(comb):
 

@@ -23,7 +23,7 @@ config = setup_config(max_round=20, initial_stack=1000, small_blind_amount=5)
 config.register_player(name="p2", algorithm=baseline1_ai())
 
 ## Play in interactive mode if uncomment
-config.register_player(name="me", algorithm=classify_ai())
+config.register_player(name="me", algorithm=my_ai())
 game_result = start_poker(config, verbose=1)
 
 print(json.dumps(game_result, indent=4))
