@@ -115,12 +115,19 @@ class my_player(
         #print(round_state['next_player'])
         #print(round_state['small_blind'])
         #print(round_state['street'])
+        current_round = round_state['round_count']
+        
         community = round_state["community_card"]
         main_pot = round_state["pot"]["main"]["amount"]
         side_pot = round_state["pot"]["side"]
         # money left
         money = valid_actions[2]["amount"]["max"]
         min_raise = valid_actions[2]["amount"]["min"]
+        
+        up = money - 1000
+        remain = 20 - current_round + 1
+        if up > (remain * 7.5 + 5):
+            return 'fold', 0
         
         #print(community)
         #print(main_pot)
