@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 import pickle
+import joblib
 
 # 梅花 0 方塊 1 紅心 2 黑桃 3
 color_dict = {'C': 0, 'D' : 1, 'H' : 2, 'S' : 3}
@@ -103,6 +104,9 @@ def counting(comb):
 #with open('random_forest_model_v4.pkl', 'rb') as file_4:
 #    model_4 = pickle.load(file_4)
 
+acts_arr = ['fold', 'call', 'raise', 'raise', 'raise', 'raise']
+chips_arr = [0, 0, 0.1, 0.25, 0.5, 1]
+
 class CallPlayer(
     BasePokerPlayer
 ):  # Do not forget to make parent class as "BasePokerPlayer"
@@ -134,7 +138,13 @@ class CallPlayer(
         combo = hole_card + community
         detail_card = []
         
-        #print(combo)
+        current_round = round_state['round_count']
+        up = money - 1000
+        remain = (20 - current_round + 1)
+        if up > (remain * 7.5 + 2.5):
+            return 'fold', 0
+        
+        print(combo)
         
         for c in combo:
             num = num_dict[c[1]]
@@ -150,36 +160,54 @@ class CallPlayer(
         arr = detail_card.copy()
         arr = arr + [call_amount, main_pot, blind]
         
+        #print(valid_actions[0]['action'], valid_actions[0]['amount'])
+        #print(valid_actions[1]['action'], valid_actions[1]['amount'])
+        #print(valid_actions[2]['action'], valid_actions[2]['amount'])
+        
         try:
-            with open('random_forest_model_1.pkl', 'rb') as f1:
-                model_1 = pickle.load(f1)
-            with open('random_forest_model_2.pkl', 'rb') as f2:
-                model_2 = pickle.load(f2)
-            with open('random_forest_model_3.pkl', 'rb') as f3:
-                model_3= pickle.load(f3)
-            with open('random_forest_model_4.pkl', 'rb') as f4:
-                model_4= pickle.load(f4)
+            #with open('random_forest_model_1.pkl', 'rb') as f1:
+            #    model_1 = pickle.load(f1)
+            #with open('random_forest_model_2.pkl', 'rb') as f2:
+            #with open('random_forest_model_3.pkl', 'rb') as f3:
+            #    model_3= pickle.load(f3)
+            #with open('random_forest_model_4.pkl', 'rb') as f4:
+            #    model_4= pickle.load(f4)
+            model_1 = joblib.load('random_forest_model_1.joblib')
+            model_2 = joblib.load('random_forest_model_2.joblib')
+            model_3 = joblib.load('random_forest_model_3.joblib')
+            model_4 = joblib.load('random_forest_model_4.joblib')
                 
         except Exception as e:
             print(f"Error loading model: {e}")
             return 'fold', 0
         
         if round == 'preflop':
-            
-            action_idx = model_1.predict(detail_card + arr)
-            
+            action_idx = model_1.predict([arr])[0]
             
         elif round == 'flop':
-            action_idx = model_2.predict([score] + detail_card + arr)
+            action_idx = model_2.predict([[score] + arr])[0]
             
         elif round == 'turn':
-            action_idx = model_3.predict([score] + detail_card + arr)
+            action_idx = model_3.predict([[score] + arr])[0]
+
         else:
-            action_idx = model_4.predict([score] + arr)
+            action_idx = model_4.predict([[score] + arr])[0]
+            
+        #print(round, action_idx)
         
-        print(round, action_idx)
+        chip = chips_arr[action_idx] * main_pot + amount
+        #print(chip, main_pot, amount)
+        #print(valid_actions[2]["amount"])
+        if action_idx > 1 and (min_raise == -1 and money == -1):
+            return action, amount # all-in
+        elif chip < min_raise:
+            return action, amount
+            #print("all-in", money)
+            
+        if action_idx == 0:
+            chip = 0 # fold
         
-        return action, amount  # action returned here is sent to the poker engine
+        return acts_arr[action_idx], chip  # action returned here is sent to the poker engine
 
     def receive_game_start_message(self, game_info):
         pass

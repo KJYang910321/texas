@@ -6,6 +6,9 @@ from agents.console_player import setup_ai as console_ai
 from agents.my_player import setup_ai as my_ai
 from agents.classify_player import setup_ai as classify_ai
 from baseline0 import setup_ai as baseline0_ai
+
+'''
+from baseline0 import setup_ai as baseline0_ai
 from baseline1 import setup_ai as baseline1_ai
 from baseline2 import setup_ai as baseline2_ai
 from baseline3 import setup_ai as baseline3_ai
@@ -13,13 +16,14 @@ from baseline4 import setup_ai as baseline4_ai
 from baseline5 import setup_ai as baseline5_ai
 from baseline6 import setup_ai as baseline6_ai
 from baseline7 import setup_ai as baseline7_ai
+'''
 
 config = setup_config(max_round=20, initial_stack=1000, small_blind_amount=5)
-config.register_player(name="p1", algorithm=baseline7_ai())
-#config.register_player(name="p2", algorithm=random_ai())
+#config.register_player(name="p1", algorithm=baseline7_ai())
+config.register_player(name="p2", algorithm=baseline0_ai())
 
 ## Play in interactive mode if uncomment
-config.register_player(name="me", algorithm=my_ai())
+config.register_player(name="me", algorithm=classify_ai())
 game_result = start_poker(config, verbose=1)
 
 print(json.dumps(game_result, indent=4))
