@@ -11,9 +11,11 @@ from baseline2 import setup_ai as baseline2_ai
 from baseline3 import setup_ai as baseline3_ai
 from baseline4 import setup_ai as baseline4_ai
 from baseline5 import setup_ai as baseline5_ai
+from baseline6 import setup_ai as baseline6_ai
+from baseline7 import setup_ai as baseline7_ai
 
 config = setup_config(max_round=20, initial_stack=1000, small_blind_amount=5)
-config.register_player(name="p1", algorithm=baseline5_ai())
+config.register_player(name="p1", algorithm=baseline7_ai())
 #config.register_player(name="p2", algorithm=random_ai())
 
 ## Play in interactive mode if uncomment

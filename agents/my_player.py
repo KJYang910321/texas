@@ -126,7 +126,7 @@ class my_player(
         
         up = money - 1000
         remain = 20 - current_round + 1
-        if up > (remain * 7.5 + 5):
+        if up > (remain * 7.5 + 2.5):
             return 'fold', 0
         
         #return valid_actions[2]["action"], money
