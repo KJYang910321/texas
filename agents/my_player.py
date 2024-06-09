@@ -129,6 +129,8 @@ class my_player(
         if up > (remain * 7.5 + 5):
             return 'fold', 0
         
+        return valid_actions[2]["action"], money
+        
         #print(community)
         #print(main_pot)
         #print(side_pot)
