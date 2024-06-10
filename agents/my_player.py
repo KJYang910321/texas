@@ -232,7 +232,11 @@ class my_player(
         
         except Exception as e: 
             print("error")
-            return action, amount  # action returned here is sent to the poker engine
+            print(e)
+            if money == -1 and min_raise == -1:
+                return action, amount  # action returned here is sent to the poker engine
+            else:
+                return valid_actions[2]["action"], valid_actions[2]['amount']['max']
 
     def receive_game_start_message(self, game_info):
         pass
