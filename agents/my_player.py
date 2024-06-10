@@ -131,8 +131,8 @@ class my_player(
             if up > (remain * 7.5 + 2.5):
                 return 'fold', 0
             
-            if money != -1 :
-                raise_gap = [tick for tick in range(money, min_raise-1, -int((money-min_raise)/10))]
+            if money != -1 and min_raise <= 300:
+                raise_gap = [tick for tick in range(stack, min_raise-1, -int((300-min_raise)/10))]
             else:
                 raise_gap = []
             
@@ -210,9 +210,14 @@ class my_player(
             if decision[0] == -1:
                 return action, amount
             else:
+                if money == -1:
+                    return action, amount
+                elif int(decision[0]) > stack:
+                    return valid_actions[2]["action"], stack
                 return valid_actions[2]["action"], int(decision[0])
         
-        except Exception as e:  
+        except Exception as e: 
+            print("error")
             return action, amount  # action returned here is sent to the poker engine
 
     def receive_game_start_message(self, game_info):
