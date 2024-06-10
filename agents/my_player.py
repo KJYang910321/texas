@@ -193,8 +193,9 @@ class my_player(
             
             required_rate = amount / (main_pot + amount)
             
-            if amount == 0:
-                print("amount = 0", win, required_rate)
+            if win == 0:
+                print("strange fold")
+                print(battle[0])
             
             # new add
             #if round_state['street'] == 'preflop':
