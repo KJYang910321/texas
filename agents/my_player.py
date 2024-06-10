@@ -136,7 +136,7 @@ class my_player(
                 print(min_raise)
                 print(stack)
                 print(int((300-min_raise)/10))
-                raise_gap = [tick for tick in range(stack, int(min_raise)+1, -int((300-min_raise)/10))]
+                raise_gap = [tick for tick in range(int(stack), int(min_raise)+1, -int((300-min_raise)/10))]
             else:
                 raise_gap = []
             
