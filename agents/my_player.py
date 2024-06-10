@@ -161,14 +161,13 @@ class my_player(
             battle = [0,0,0]
             weight = 0
             for trial in range(10000):
-                new = deck.copy()
-                oppo = np.random.choice(new, 2, replace = False)
-                for o in oppo:
-                    new.remove(o)
+                
+                np.random.shuffle(deck)
+                oppo = deck[10:12]
                 
                 cp_ratio = amount / main_pot
                 
-                public = np.random.choice(new, (5-len(community)), replace=False)
+                public = deck[:(5-len(community))]
                 
                 player_comb = player.copy()
                 player_comb.extend(community)
