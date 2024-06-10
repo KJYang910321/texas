@@ -183,7 +183,7 @@ class my_player(
                 if player_s > oppo_s :
                     battle[0] += 1
                 elif player_s == oppo_s :
-                    battle[1] += 1
+                    battle[0] += 0.01
                 else:
                     battle[2] += 1
             
@@ -196,6 +196,12 @@ class my_player(
             if win == 0:
                 print("strange fold")
                 print(battle[0])
+                print("")
+                print("")
+                print(player)
+                print(community)
+                print(deck)
+                print("")
             
             # new add
             #if round_state['street'] == 'preflop':
