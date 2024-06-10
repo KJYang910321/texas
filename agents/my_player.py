@@ -173,7 +173,7 @@ class my_player(
                 player_comb.extend(community)
                 player_comb.extend(public)
 
-                oppo_comb = oppo.copy().tolist()
+                oppo_comb = oppo.copy()
                 oppo_comb.extend(community)
                 oppo_comb.extend(public)
                 
