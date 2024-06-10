@@ -133,7 +133,10 @@ class my_player(
                 return 'fold', 0
             
             if money != -1 and min_raise <= 300:
-                raise_gap = [tick for tick in range(int(stack), int(min_raise)+1, -int((300-min_raise)/10))]
+                slice = int((300-min_raise)/10)
+                if slice == 0:
+                    slice = 10
+                raise_gap = [tick for tick in range(int(stack), int(min_raise)+1, -slice)]
             else:
                 raise_gap = []
             
