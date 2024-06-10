@@ -115,6 +115,11 @@ class my_player(
             
             current_round = round_state['round_count']
             
+            if current_round == 'river':
+                print(valid_actions[0]['action'], valid_actions[0]['amount'])
+                print(valid_actions[1]['action'], valid_actions[1]['amount'])
+                print(valid_actions[2]['action'], valid_actions[2]['amount'])
+            
             community = round_state["community_card"]
             main_pot = round_state["pot"]["main"]["amount"]
             side_pot = round_state["pot"]["side"]
