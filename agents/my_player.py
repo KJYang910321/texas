@@ -115,7 +115,7 @@ class my_player(
             
             current_round = round_state['round_count']
             
-            if current_round == 'river':
+            if round_state['street'] == 'river':
                 print(valid_actions[0]['action'], valid_actions[0]['amount'])
                 print(valid_actions[1]['action'], valid_actions[1]['amount'])
                 print(valid_actions[2]['action'], valid_actions[2]['amount'])
