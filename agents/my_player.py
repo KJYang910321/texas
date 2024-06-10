@@ -133,9 +133,6 @@ class my_player(
                 return 'fold', 0
             
             if money != -1 and min_raise <= 300:
-                print(min_raise)
-                print(stack)
-                print(int((300-min_raise)/10))
                 raise_gap = [tick for tick in range(int(stack), int(min_raise)+1, -int((300-min_raise)/10))]
             else:
                 raise_gap = []
@@ -201,13 +198,21 @@ class my_player(
                 
             # one shot
             one_shot = 2.5 + (remain * 7.5)
+            
+            # adjust for preflop
+            if round_state['street'] == 'preflop':
+                if amount == 5:
+                    required_rate = 0.3
+                elif amount == 10:
+                    required_rate = 0
+            
             if win <= (required_rate) or ((amount >= one_shot or amount >= 100) and win < 0.5):
                 if danger == 0:
                     return valid_actions[0]["action"], valid_actions[0]["amount"]
                 elif danger == 2:
                     return action, amount
             
-            if round_state['street'] == 'preflop' and stack > 1050:
+            if round_state['street'] == 'preflop' and stack > 1065:
                 if win < 0.4:
                     return valid_actions[0]["action"], valid_actions[0]["amount"]
             
