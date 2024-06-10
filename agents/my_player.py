@@ -146,11 +146,14 @@ class my_player(
                 deck.remove(c)
             
             battle = [0,0,0]
+            weight = 0
             for trial in range(10000):
                 new = deck.copy()
                 oppo = np.random.choice(new, 2, replace = False)
                 for o in oppo:
                     new.remove(o)
+                
+                cp_ratio = amount / main_pot
                 
                 public = np.random.choice(new, (5-len(community)), replace=False)
                 
@@ -164,6 +167,7 @@ class my_player(
                 
                 player_s = counting(player_comb)
                 oppo_s = counting(oppo_comb)
+                
                 if player_s > oppo_s :
                     battle[0] += 1
                 elif player_s == oppo_s :
@@ -184,7 +188,7 @@ class my_player(
                 # require more aggressive plays
                 danger = 1
             
-            if win <= (required_rate - 0.1):
+            if win <= (required_rate) or (amount >=200 and win < 0.4):
                 if danger == 0:
                     return valid_actions[0]["action"], valid_actions[0]["amount"]
             
