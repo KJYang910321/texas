@@ -144,7 +144,7 @@ class CallPlayer(
         if up > (remain * 7.5 + 2.5):
             return 'fold', 0
         
-        print(combo)
+        #print(combo)
         
         for c in combo:
             num = num_dict[c[1]]
@@ -160,6 +160,7 @@ class CallPlayer(
         arr = detail_card.copy()
         arr = arr + [call_amount, main_pot, blind]
         
+        #print(main_pot)
         #print(valid_actions[0]['action'], valid_actions[0]['amount'])
         #print(valid_actions[1]['action'], valid_actions[1]['amount'])
         #print(valid_actions[2]['action'], valid_actions[2]['amount'])

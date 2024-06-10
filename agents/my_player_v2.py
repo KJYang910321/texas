@@ -108,104 +108,132 @@ class my_player(
     #  we define the logic to make an action through this method. (so this method would be the core of your AI)
     def declare_action(self, valid_actions, hole_card, round_state):
         # valid_actions format => [fold_action_info, call_action_info, raise_action_info]
-        try :
-            call_action_info = valid_actions[1]
-            action, amount = call_action_info["action"], call_action_info["amount"]
+        call_action_info = valid_actions[1]
+        action, amount = call_action_info["action"], call_action_info["amount"]
+        
+        # basic info for the game state
+        #print(round_state['next_player'])
+        #print(round_state['small_blind'])
+        #print(round_state['street'])
+        current_round = round_state['round_count']
+        
+        community = round_state["community_card"]
+        main_pot = round_state["pot"]["main"]["amount"]
+        side_pot = round_state["pot"]["side"]
+        # money left
+        money = valid_actions[2]["amount"]["max"]
+        min_raise = valid_actions[2]["amount"]["min"]
+        
+        up = money - 1000
+        remain = 20 - current_round + 1
+        if up > (remain * 7.5 + 2.5):
+            return 'fold', 0
+        
+        #return valid_actions[2]["action"], money
+        
+        print(f"my_hands:{hole_card}")
+        print(f"public_cards:{community}")
+        #print(main_pot)
+        #print(side_pot)
+        #print(money)
+        #print(min_raise)
+        #print(valid_actions)
+        #print("*************************")
+        
+        if money != -1 :
+            raise_gap = [tick for tick in range(money, min_raise-1, -int((money-min_raise)/10))]
+        else:
+            raise_gap = []
+        
+        deck = [change_to_card(i) for i in range(52)]
+        player = hole_card.copy()
+        
+        for p in player:
+            deck.remove(p)
+        
+        for c in community:
+            deck.remove(c)
+        
+        battle = [0,0,0]
+        for trial in range(10000):
+            new = deck.copy()
+            oppo = np.random.choice(new, 2, replace = False)
+            for o in oppo:
+                new.remove(o)
             
-            current_round = round_state['round_count']
+            #print(new)
+            #print("------------------")
             
-            community = round_state["community_card"]
-            main_pot = round_state["pot"]["main"]["amount"]
-            side_pot = round_state["pot"]["side"]
-            # money left
-            money = valid_actions[2]["amount"]["max"]
-            min_raise = valid_actions[2]["amount"]["min"]
+            public = np.random.choice(new, (5-len(community)), replace=False)
+            #print(public)
             
-            my_id = round_state['next_player']
-            stack = round_state['seats'][my_id]['stack']
+            # tidy up cards
+            #print("---------")
             
-            up = stack - 1000
-            remain = 20 - current_round + 1
+            #print(player)
+            #print(oppo)
             
-            # absolute win
-            if up > (remain * 7.5 + 2.5):
-                return 'fold', 0
-            
-            if money != -1 :
-                raise_gap = [tick for tick in range(money, min_raise-1, -int((money-min_raise)/10))]
-            else:
-                raise_gap = []
-            
-            deck = [change_to_card(i) for i in range(52)]
-            player = hole_card.copy()
-            
-            for p in player:
-                deck.remove(p)
-            
-            for c in community:
-                deck.remove(c)
-            
-            battle = [0,0,0]
-            for trial in range(10000):
-                new = deck.copy()
-                oppo = np.random.choice(new, 2, replace = False)
-                for o in oppo:
-                    new.remove(o)
-                
-                public = np.random.choice(new, (5-len(community)), replace=False)
-                
-                player_comb = player.copy()
-                player_comb.extend(community)
-                player_comb.extend(public)
+            player_comb = player.copy()
+            player_comb.extend(community)
+            player_comb.extend(public)
 
-                oppo_comb = oppo.copy().tolist()
-                oppo_comb.extend(community)
-                oppo_comb.extend(public)
-                
-                player_s = counting(player_comb)
-                oppo_s = counting(oppo_comb)
-                if player_s > oppo_s :
-                    battle[0] += 1
-                elif player_s == oppo_s :
-                    battle[1] += 1
-                else:
-                    battle[2] += 1
+            oppo_comb = oppo.copy().tolist()
+            oppo_comb.extend(community)
+            oppo_comb.extend(public)
             
-            win = (battle[0] / 10000)
-            battle[1] /= 10000
-            battle[2] /= 10000
-            
-            required_rate = amount / (main_pot + amount)
-            
-            # define normal and danger status
-            danger = 0
-            danger_line = remain * 7.5 - 20
-            if (1000 - stack) >= danger_line:
-                # require more aggressive plays
-                danger = 1
-            
-            if win <= (required_rate - 0.1):
-                if danger == 0:
-                    return valid_actions[0]["action"], valid_actions[0]["amount"]
-            
-            
+            player_s = counting(player_comb)
+            oppo_s = counting(oppo_comb)
+            if player_s > oppo_s :
+                battle[0] += 1
+            elif player_s == oppo_s :
+                battle[1] += 1
+            else:
+                battle[2] += 1
+        
+        #print(battle)
+        #print("-----------")
+        win = (battle[0] / 10000)
+        battle[1] /= 10000
+        battle[2] /= 10000
+        
+        #print(battle)
+        #print("-----------")
+        
+        required_rate = amount / (main_pot + amount)
+        #print(required_rate)
+        #print("-----------")
+        
+        #print(win, required_rate)
+        #print("-----------")
+        
+        #print(valid_actions[0]["action"], valid_actions[0]["amount"])
+        
+        #return action, amount
+        
+        if win <= (required_rate - 0.1):
+            return valid_actions[0]["action"], valid_actions[0]["amount"]
+        
+        else:
+            # decide whether raise or not
+            # -1 means call
+            #print("haha")
             choice = [-1]
             for raise_amount in raise_gap:
                 required = raise_amount / (main_pot + raise_amount)
                 if win > required:
                     choice.append(raise_amount)
-                    if danger == 1:
-                        choice.append(raise_amount)
-                
-            # should adjust win rate that higher win rate with lower raise amount
+            
+            #print("choice", choice)
+            #print("------------------")
             decision = np.random.choice(choice, 1)
+            #print("decision", decision)
             if decision[0] == -1:
                 return action, amount
             else:
                 return valid_actions[2]["action"], int(decision[0])
-        
-        except Exception as e:  
-            return action, amount  # action returned here is sent to the poker engine
+            
+            
+        return action, amount  # action returned here is sent to the poker engine
 
     def receive_game_start_message(self, game_info):
         pass
