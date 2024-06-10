@@ -235,6 +235,9 @@ class my_player(
             print("error")
             print(e)
             traceback.print_exc()
+            print(raise_gap)
+            print(min_raise)
+            print(stack)
             if money == -1 and min_raise == -1:
                 return action, amount  # action returned here is sent to the poker engine
             else:
