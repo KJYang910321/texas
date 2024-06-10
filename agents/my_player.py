@@ -181,6 +181,11 @@ class my_player(
             
             required_rate = amount / (main_pot + amount)
             
+            # new add
+            #if round_state['street'] == 'preflop':
+            #    required_rate -= 0.15
+            # end new add
+            
             # define normal and danger status
             danger = 0
             danger_line = remain * 7.5 - 20
@@ -205,6 +210,10 @@ class my_player(
             choice = [-1]
             for raise_amount in raise_gap:
                 required = raise_amount / (main_pot + raise_amount)
+                # new add
+                #if round_state['street'] == 'preflop' :
+                #    required -= 0.2
+                # end new add
                 if (win > required or danger == 2):
                     choice.append(raise_amount)
                     if danger >= 1:
