@@ -143,6 +143,10 @@ class my_player(
             deck = [change_to_card(i) for i in range(52)]
             player = hole_card.copy()
             
+            print("**********")
+            print(hole_card)
+            print("**********")
+            
             for p in player:
                 deck.remove(p)
             
