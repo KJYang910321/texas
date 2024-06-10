@@ -198,6 +198,9 @@ class my_player(
                 elif danger == 2:
                     return action, amount
             
+            if round_state['street'] == 'preflop' and stack > 1050:
+                if win < 0.4:
+                    return valid_actions[0]["action"], valid_actions[0]["amount"]
             
             choice = [-1]
             for raise_amount in raise_gap:
