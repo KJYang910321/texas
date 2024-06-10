@@ -195,6 +195,8 @@ class my_player(
             if win <= (required_rate) or ((amount >= one_shot or amount >= 100) and win < 0.5):
                 if danger == 0:
                     return valid_actions[0]["action"], valid_actions[0]["amount"]
+                elif danger == 2:
+                    return action, amount
             
             
             choice = [-1]
