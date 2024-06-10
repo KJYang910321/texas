@@ -188,7 +188,9 @@ class my_player(
                 # require more aggressive plays
                 danger = 1
             
-            if win <= (required_rate) or (amount >=200 and win < 0.4):
+            # one shot
+            one_shot = 2.5 + (remain * 7.5)
+            if win <= (required_rate) or ((amount >= one_shot or amount >= 100) and win < 0.5):
                 if danger == 0:
                     return valid_actions[0]["action"], valid_actions[0]["amount"]
             
