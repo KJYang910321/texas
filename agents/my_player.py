@@ -125,7 +125,7 @@ class my_player(
             stack = round_state['seats'][my_id]['stack']
             
             up = stack - 1000
-            remain = 20 - current_round + 1
+            remain = 20 - current_round
             
             # absolute win
             if up > (remain * 7.5 + 2.5):
