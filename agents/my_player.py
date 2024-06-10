@@ -133,6 +133,9 @@ class my_player(
                 return 'fold', 0
             
             if money != -1 and min_raise <= 300:
+                print(min_raise)
+                print(stack)
+                print(int((300-min_raise)/10))
                 raise_gap = [tick for tick in range(stack, min_raise-1, -int((300-min_raise)/10))]
             else:
                 raise_gap = []
@@ -235,9 +238,6 @@ class my_player(
             print("error")
             print(e)
             traceback.print_exc()
-            print(raise_gap)
-            print(min_raise)
-            print(stack)
             if money == -1 and min_raise == -1:
                 return action, amount  # action returned here is sent to the poker engine
             else:
