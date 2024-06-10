@@ -194,6 +194,9 @@ class my_player(
             
             required_rate = amount / (main_pot + amount)
             
+            if amount == 0:
+                print("amount = 0", win, required_rate)
+            
             # new add
             #if round_state['street'] == 'preflop':
             #    required_rate -= 0.15
