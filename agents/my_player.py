@@ -1,6 +1,7 @@
 from game.players import BasePokerPlayer
 import random
 import numpy as np
+import traceback
 
 # 梅花 0 方塊 1 紅心 2 黑桃 3
 color_dict = {'C': 0, 'D' : 1, 'H' : 2, 'S' : 3}
@@ -226,13 +227,14 @@ class my_player(
             else:
                 if money == -1:
                     return action, amount
-                elif int(decision[0]) > stack:
+                elif decision[0] > stack:
                     return valid_actions[2]["action"], stack
                 return valid_actions[2]["action"], int(decision[0])
         
         except Exception as e: 
             print("error")
             print(e)
+            traceback.print_exc()
             if money == -1 and min_raise == -1:
                 return action, amount  # action returned here is sent to the poker engine
             else:
