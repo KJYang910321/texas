@@ -184,10 +184,12 @@ class my_player(
             # define normal and danger status
             danger = 0
             danger_line = remain * 7.5 - 20
-            if (1000 - stack) >= danger_line:
+            if (1000 - stack) >= (2 * danger_line):
                 # require more aggressive plays
+                danger = 2
+            elif (1000 - stack) >= danger_line:
                 danger = 1
-            
+                
             # one shot
             one_shot = 2.5 + (remain * 7.5)
             if win <= (required_rate) or ((amount >= one_shot or amount >= 100) and win < 0.5):
@@ -198,9 +200,9 @@ class my_player(
             choice = [-1]
             for raise_amount in raise_gap:
                 required = raise_amount / (main_pot + raise_amount)
-                if win > required:
+                if (win > required or danger == 2):
                     choice.append(raise_amount)
-                    if danger == 1:
+                    if danger >= 1:
                         choice.append(raise_amount)
                 
             # should adjust win rate that higher win rate with lower raise amount
