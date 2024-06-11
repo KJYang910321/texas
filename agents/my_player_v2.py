@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 import joblib
+import time
 
 # 梅花 0 方塊 1 紅心 2 黑桃 3
 color_dict = {'C': 0, 'D' : 1, 'H' : 2, 'S' : 3}
@@ -112,7 +113,13 @@ def change_to_card(code):
 class my_player(
     BasePokerPlayer
 ):  # Do not forget to make parent class as "BasePokerPlayer"
-
+    
+    def __init__(self, model_1, model_2, model_3, model_4):
+        self.model_1 = model_1
+        self.model_2 = model_2
+        self.model_3 = model_3
+        self.model_4 = model_4
+    
     #  we define the logic to make an action through this method. (so this method would be the core of your AI)
     def declare_action(self, valid_actions, hole_card, round_state):
         # valid_actions format => [fold_action_info, call_action_info, raise_action_info]
@@ -144,19 +151,19 @@ class my_player(
             street = round_state['street']
             if street == 'preflop':
                 prev_street = 'preflop'
-                model_1 = joblib.load('random_forest_model_cp_1.joblib')
+                #model_1 = joblib.load('random_forest_model_cp_1.joblib')
                 
             elif street == 'flop':
                 prev_street = 'preflop'
-                model_2 = joblib.load('random_forest_model_cp_2.joblib')
+                #model_2 = joblib.load('random_forest_model_cp_2.joblib')
                 
             elif street == 'turn':
                 prev_street = 'flop'
-                model_3 = joblib.load('random_forest_model_cp_3.joblib')
+                #model_3 = joblib.load('random_forest_model_cp_3.joblib')
                 
             elif street == 'river':
                 prev_street = 'turn'
-                model_4 = joblib.load('random_forest_model_cp_4.joblib')
+                #model_4 = joblib.load('random_forest_model_cp_4.joblib')
                 
             prev_act = round_state['action_histories'][prev_street][-1]['action']
             #print(prev_act)
@@ -218,7 +225,7 @@ class my_player(
             #model_3 = joblib.load('random_forest_model_3.joblib')
             #model_4 = joblib.load('random_forest_model_4.joblib')
             
-            for trial in range(3000):
+            for trial in range(1500):
                 
                 np.random.shuffle(deck)
                 oppo = deck[10:12]
@@ -250,16 +257,20 @@ class my_player(
                 arr = arr + [prev_amount/10, main_pot/10, blind]
                 
                 if street == 'preflop':
-                    action_idx = model_1.predict([arr])[0]
+                    #start_time = time.time()
+                    action_idx = self.model_1.predict([arr])[0]
+                    #end_time = time.time()
+                    #time_cost = end_time - start_time
+                    #print(time_cost)
                     
                 elif street == 'flop':
-                    action_idx = model_2.predict([[oppo_s] + arr])[0]
+                    action_idx = self.model_2.predict([[oppo_s] + arr])[0]
                     
                 elif street == 'turn':
-                    action_idx = model_3.predict([[oppo_s] + arr])[0]
+                    action_idx = self.model_3.predict([[oppo_s] + arr])[0]
 
                 else:
-                    action_idx = model_4.predict([[oppo_s] + [prev_amount/10, main_pot/10, blind]])[0]
+                    action_idx = self.model_4.predict([[oppo_s] + [prev_amount/10, main_pot/10, blind]])[0]
                     
                 # the closer between action_idx and prev_idx
                 # the higher the weight for this single simulation
@@ -365,4 +376,8 @@ class my_player(
 
 
 def setup_ai():
-    return my_player()
+    model_1 = joblib.load('random_forest_model_1.joblib')
+    model_2 = joblib.load('random_forest_model_2.joblib')
+    model_3 = joblib.load('random_forest_model_3.joblib')
+    model_4 = joblib.load('random_forest_model_4.joblib')
+    return my_player(model_1, model_2, model_3, model_4)
