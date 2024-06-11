@@ -117,7 +117,34 @@ class CallPlayer(
         call_action_info = valid_actions[1]
         action, amount = call_action_info["action"], call_action_info["amount"]
         
+        community = round_state["community_card"]
+        main_pot = round_state["pot"]["main"]["amount"]
+        # side_pot = round_state["pot"]["side"]
+        # money left
+        money = valid_actions[2]["amount"]["max"]
+        min_raise = valid_actions[2]["amount"]["min"]
+        
         #print(round_state)
+        street = round_state['street']
+        prev_act = round_state['action_histories'][street][-1]['action']
+        prev_amount = round_state['action_histories'][street][-1]['amount']
+        
+        # analysis opponent's hand
+        if prev_act == 'fold':
+            prev_idx = 0
+        elif prev_act == 'call':
+            prev_idx = 1
+        else:
+            raise_ratio = prev_amount / main_pot
+            if raise_ratio <= (chips_arr[2]/2):
+                prev_idx = 2
+            elif raise_ratio >= (chips_arr[5/2]):
+                prev_idx = 5
+            else:
+                for rate_idx in range(2,5):
+                    if raise_ratio > chips_arr[rate_idx]/2 and raise_ratio < chips_arr[rate_idx+1]/2:
+                        prev_idx = rate_idx
+            
         player_idx = round_state['next_player']
         small_blind = round_state['small_blind_pos']
         
@@ -125,14 +152,6 @@ class CallPlayer(
             blind = 0
         else:
             blind = 1
-        
-        
-        community = round_state["community_card"]
-        main_pot = round_state["pot"]["main"]["amount"]
-        side_pot = round_state["pot"]["side"]
-        # money left
-        money = valid_actions[2]["amount"]["max"]
-        min_raise = valid_actions[2]["amount"]["min"]
         
         score = counting(hole_card + community)
         combo = hole_card + community

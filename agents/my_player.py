@@ -115,17 +115,17 @@ class my_player(
             
             current_round = round_state['round_count']
             
-            if round_state['street'] == 'river':
-                print(valid_actions[0]['action'], valid_actions[0]['amount'])
-                print(valid_actions[1]['action'], valid_actions[1]['amount'])
-                print(valid_actions[2]['action'], valid_actions[2]['amount'])
-            
             community = round_state["community_card"]
             main_pot = round_state["pot"]["main"]["amount"]
             side_pot = round_state["pot"]["side"]
             # money left
             money = valid_actions[2]["amount"]["max"]
             min_raise = valid_actions[2]["amount"]["min"]
+            
+            if main_pot > 220:
+                print("testing hands")
+                print(hole_card)
+                print("**********")
             
             my_id = round_state['next_player']
             stack = round_state['seats'][my_id]['stack']
@@ -148,9 +148,9 @@ class my_player(
             deck = [change_to_card(i) for i in range(52)]
             player = hole_card.copy()
             
-            print("**********")
-            print(hole_card)
-            print("**********")
+            #print("**********")
+            #print(hole_card)
+            #print("**********")
             
             for p in player:
                 deck.remove(p)
@@ -192,16 +192,6 @@ class my_player(
             battle[2] /= 10000
             
             required_rate = amount / (main_pot + amount)
-            
-            if win == 0:
-                print("strange fold")
-                print(battle[0])
-                print("")
-                print("")
-                print(player)
-                print(community)
-                print(deck)
-                print("")
             
             # new add
             #if round_state['street'] == 'preflop':
@@ -261,9 +251,9 @@ class my_player(
                 return valid_actions[2]["action"], int(decision[0])
         
         except Exception as e: 
-            print("error")
-            print(e)
-            traceback.print_exc()
+            #print("error")
+            #print(e)
+            #traceback.print_exc()
             if money == -1 and min_raise == -1:
                 return action, amount  # action returned here is sent to the poker engine
             else:
