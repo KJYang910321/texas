@@ -144,19 +144,19 @@ class my_player(
             street = round_state['street']
             if street == 'preflop':
                 prev_street = 'preflop'
-                model_1 = joblib.load('random_forest_model_1.joblib')
+                model_1 = joblib.load('random_forest_model_cp_1.joblib')
                 
             elif street == 'flop':
                 prev_street = 'preflop'
-                model_2 = joblib.load('random_forest_model_2.joblib')
+                model_2 = joblib.load('random_forest_model_cp_2.joblib')
                 
             elif street == 'turn':
                 prev_street = 'flop'
-                model_3 = joblib.load('random_forest_model_3.joblib')
+                model_3 = joblib.load('random_forest_model_cp_3.joblib')
                 
             elif street == 'river':
                 prev_street = 'turn'
-                model_4 = joblib.load('random_forest_model_4.joblib')
+                model_4 = joblib.load('random_forest_model_cp_4.joblib')
                 
             prev_act = round_state['action_histories'][prev_street][-1]['action']
             #print(prev_act)
