@@ -225,7 +225,7 @@ class my_player(
             #model_3 = joblib.load('random_forest_model_3.joblib')
             #model_4 = joblib.load('random_forest_model_4.joblib')
             
-            for trial in range(1500):
+            for trial in range(800):
                 
                 np.random.shuffle(deck)
                 oppo = deck[10:12]
