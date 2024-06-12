@@ -26,7 +26,7 @@ from baseline7 import setup_ai as baseline7_ai
 '''
 
 config = setup_config(max_round=20, initial_stack=1000, small_blind_amount=5)
-config.register_player(name="baseline_5", algorithm=baseline5_ai())
+config.register_player(name="baseline_6", algorithm=baseline6_ai())
 #config.register_player(name="p2", algorithm=console_ai())
 #config.register_player(name="testing_my", algorithm=my_ai())
 #config.register_player(name="random", algorithm=random_ai())
